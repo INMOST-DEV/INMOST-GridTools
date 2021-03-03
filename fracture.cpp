@@ -163,7 +163,7 @@ void Fracture::Open(Tag aperture, bool fill_fracture, double gap_multiplier)
 					}
 				}
 			}
-			dynarray<int,64> nums(n_cells.size()); //store all numbers
+			std::vector<int> nums(n_cells.size()); //store all numbers
 			for(INMOST_DATA_ENUM_TYPE k = 0; k < n_cells.size(); ++k) nums[k] = n_cells[k].IntegerDF(indexes);
 			std::sort(nums.begin(),nums.end());
 			nums.resize(std::unique(nums.begin(),nums.end()) - nums.begin());
