@@ -47,6 +47,9 @@ add_executable(check_collapse check_collapse.cpp)
 add_executable(Fracture test_fracture.cpp)
 add_executable(segment_data segment_data.cpp)
 add_executable(ChangeTagName change_tag_name.cpp)
+
+
+
 add_library(FractureLib fracture.cpp fracture.h)
 add_library(SliceFuncLib slice_func.cpp slice_func.h)
 add_library(FixFaultsLib fix_faults.cpp fix_faults.h)
@@ -54,168 +57,99 @@ add_library(CubeTransformLib cube_transform.cpp cube_transform.h)
 add_library(SetLayersLib set_layers.cpp set_layers.h)
 
 
-target_link_libraries(MakeFaults ${INMOST_LIBRARIES})
-target_link_libraries(MakeFaults FractureLib)
-target_link_libraries(MakeFaults FixFaultsLib)
-target_link_libraries(MakeFaults SliceFuncLib)
-install(TARGETS MakeFaults EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(SetLayers ${INMOST_LIBRARIES})
-target_link_libraries(SetLayers SetLayersLib)
-install(TARGETS SetLayers EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(Fracture ${INMOST_LIBRARIES})
-target_link_libraries(Fracture FractureLib)
-install(TARGETS Fracture EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(FixFaults ${INMOST_LIBRARIES})
-target_link_libraries(FixFaults FixFaultsLib)
-install(TARGETS FixFaults EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(FixTinyCollapse ${INMOST_LIBRARIES})
-install(TARGETS FixTinyCollapse EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(split_faces ${INMOST_LIBRARIES})
-install(TARGETS split_faces EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(check_collapse ${INMOST_LIBRARIES})
-install(TARGETS check_collapse EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(glue_faces ${INMOST_LIBRARIES})
-install(TARGETS glue_faces EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(FixTiny ${INMOST_LIBRARIES})
-install(TARGETS FixTiny EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(UniteFaces ${INMOST_LIBRARIES})
-install(TARGETS UniteFaces EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-target_link_libraries(Dual ${INMOST_LIBRARIES})
-install(TARGETS Dual EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(Tetra ${INMOST_LIBRARIES})
-install(TARGETS Tetra EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-
-target_link_libraries(Slice ${INMOST_LIBRARIES})
-install(TARGETS Slice EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-target_link_libraries(SliceFunc ${INMOST_LIBRARIES})
-target_link_libraries(SliceFunc SliceFuncLib)
-install(TARGETS SliceFunc EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-target_link_libraries(SplitNonplanar ${INMOST_LIBRARIES})
-install(TARGETS SplitNonplanar EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-target_link_libraries(CollapseDegenerate ${INMOST_LIBRARIES})
-install(TARGETS CollapseDegenerate EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-target_link_libraries(Bnd2Stl ${INMOST_LIBRARIES})
-install(TARGETS Bnd2Stl EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(Sector ${INMOST_LIBRARIES})
-install(TARGETS Sector EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(Sew ${INMOST_LIBRARIES})
-install(TARGETS Sew EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(Scale ${INMOST_LIBRARIES})
-install(TARGETS Scale EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-target_link_libraries(Move ${INMOST_LIBRARIES})
-install(TARGETS Move EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(Convert ${INMOST_LIBRARIES})
-install(TARGETS Convert EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(CubeTransform ${INMOST_LIBRARIES})
-target_link_libraries(CubeTransform CubeTransformLib)
-install(TARGETS CubeTransform EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(MeshInfo ${INMOST_LIBRARIES})
-install(TARGETS MeshInfo EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(SameMeshDifference ${INMOST_LIBRARIES})
-install(TARGETS SameMeshDifference EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(MatchSameMeshDifference ${INMOST_LIBRARIES})
-install(TARGETS MatchSameMeshDifference EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-
-target_link_libraries(MeshDifference ${INMOST_LIBRARIES})
-install(TARGETS MeshDifference EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(Kmeans ${INMOST_LIBRARIES})
-install(TARGETS Kmeans EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(Agglomerate ${INMOST_LIBRARIES})
-install(TARGETS Agglomerate EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(acute_mesh ${INMOST_LIBRARIES})
-install(TARGETS acute_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(disturbed_mesh ${INMOST_LIBRARIES})
-install(TARGETS disturbed_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(hex_mesh ${INMOST_LIBRARIES})
-install(TARGETS hex_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(kershaw_mesh ${INMOST_LIBRARIES})
-install(TARGETS kershaw_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(nonconvex_mesh ${INMOST_LIBRARIES})
-install(TARGETS nonconvex_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(e_mesh ${INMOST_LIBRARIES})
-install(TARGETS e_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(twist_mesh ${INMOST_LIBRARIES})
-install(TARGETS twist_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(shestakov_mesh ${INMOST_LIBRARIES})
-install(TARGETS shestakov_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(sinusoidal_mesh ${INMOST_LIBRARIES})
-install(TARGETS sinusoidal_mesh EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-target_link_libraries(segment_data ${INMOST_LIBRARIES})
-install(TARGETS segment_data EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
-
-
-target_link_libraries(ChangeTagName ${INMOST_LIBRARIES})
-install(TARGETS ChangeTagName EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
 
 set_property(TARGET FractureLib PROPERTY PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/fracture.h")
 set_property(TARGET SliceFuncLib PROPERTY PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/slice_func.h")
 set_property(TARGET FixFaultsLib PROPERTY PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/fix_faults.h")
 set_property(TARGET CubeTransformLib PROPERTY PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/cube_transform.h")
 
-install(TARGETS FractureLib SliceFuncLib FixFaultsLib CubeTransformLib EXPORT inmost-targets 
+list(APPEND LIBS
+	FractureLib
+	SliceFuncLib
+	FixFaultsLib
+	CubeTransformLib)
+
+list(APPEND EXECS
+	FixFaults
+	SetLayers
+	MakeFaults
+	FixTiny
+	FixTinyCollapse
+	UniteFaces
+	Dual
+	Tetra
+	Slice
+	SliceFunc
+	SplitNonplanar
+	CollapseDegenerate
+	Bnd2Stl
+	Sector
+	Sew
+	Scale
+	Move
+	Convert
+	CubeTransform
+	MeshInfo
+	SameMeshDifference
+	MatchSameMeshDifference
+	MeshDifference
+	Kmeans
+	Agglomerate
+	acute_mesh
+	disturbed_mesh
+	hex_mesh
+	kershaw_mesh
+	nonconvex_mesh
+	e_mesh
+	twist_mesh
+	shestakov_mesh
+	sinusoidal_mesh
+	split_faces
+	glue_faces
+	check_collapse
+	Fracture
+	segment_data
+	ChangeTagName)
+list(APPEND LINK_Fracture
+	MakeFaults
+	Fracture)
+list(APPEND LINK_FixFaults
+	MakeFaults
+	FixFaults)
+list(APPEND LINK_SliceFunc
+	MakeFaults
+	SliceFunc)
+list(APPEND LINK_SetLayers
+	SetLayers)
+list(APPEND LINK_CubeTransform
+	CubeTransform)
+	
+foreach(EXEC ${EXECS})
+	target_link_libraries(${EXEC} ${INMOST_LIBRARIES})
+	install(TARGETS ${EXEC} EXPORT inmost-targets RUNTIME DESTINATION bin/GridTools)
+endforeach(EXEC ${EXECS})
+
+foreach(EXEC ${LINK_Fracture})
+	target_link_libraries(${EXEC} FractureLib)
+endforeach(EXEC ${LINK_Fracture})
+
+foreach(EXEC ${LINK_FixFaults})
+	target_link_libraries(${EXEC} FixFaultsLib)
+endforeach(EXEC ${LINK_FixFaults})
+	
+foreach(EXEC ${LINK_SliceFunc})
+	target_link_libraries(${EXEC} SliceFuncLib)
+endforeach(EXEC ${LINK_SliceFunc})
+
+foreach(EXEC ${LINK_SetLayers})
+	target_link_libraries(${EXEC} SetLayersLib)
+endforeach(EXEC ${LINK_SetLayers})
+
+foreach(EXEC ${LINK_CubeTransform})
+	target_link_libraries(${EXEC} CubeTransformLib)
+endforeach(EXEC ${LINK_CubeTransform})
+	
+install(TARGETS ${LIBS} EXPORT inmost-targets 
         LIBRARY DESTINATION lib 
         ARCHIVE DESTINATION lib
         PUBLIC_HEADER DESTINATION include)
