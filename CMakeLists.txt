@@ -47,6 +47,7 @@ add_executable(check_collapse check_collapse.cpp)
 add_executable(Fracture test_fracture.cpp)
 add_executable(segment_data segment_data.cpp)
 add_executable(ChangeTagName change_tag_name.cpp)
+add_executable(Anisotropy anisotropy.cpp)
 
 
 
@@ -109,7 +110,8 @@ list(APPEND EXECS
 	check_collapse
 	Fracture
 	segment_data
-	ChangeTagName)
+	ChangeTagName
+	Anisotropy)
 list(APPEND LINK_Fracture
 	MakeFaults
 	Fracture)
