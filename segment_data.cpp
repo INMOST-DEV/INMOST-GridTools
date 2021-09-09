@@ -15,6 +15,7 @@ int main(int argc, char ** argv)
 	Mesh m;
 	m.Load(argv[1]);
 
+
 	Storage::real p1[3], p2[3];
 	p1[0] = atof(argv[2]);
 	p1[1] = atof(argv[3]);
@@ -62,12 +63,19 @@ int main(int argc, char ** argv)
 		std::cout << "no cells found" << std::endl;
 		return -1;
 	}
-	std::cout << "x; y; z; ";
+
+	std::sort(cells.rbegin(), cells.rend(), Mesh::CentroidComparator(&m));
+
+	std::cout << "\"x\";\"y\";\"z\";";
 	if( comp != -1 )
-		std::cout << odata << "[" << comp << "]; ";
+		std::cout << "\"" << odata << "[" << comp << "]\"";
 	else if( otag.GetSize() != ENUMUNDEF )
-		for(unsigned k = 0; k < otag.GetSize(); ++k) std::cout << odata << "[" << k << "]; ";
-	else std::cout << odata << "; ";
+		for (unsigned k = 0; k < otag.GetSize(); ++k)
+		{
+			std::cout << "\"" << odata << "[" << k << "]\"";
+			if (k + 1 != otag.GetSize()) std::cout << ";";
+		}
+	else std::cout << odata;
 	std::cout << std::endl;
 	
 	
@@ -75,36 +83,64 @@ int main(int argc, char ** argv)
 	{
 		Storage::real cnt[3];
 		it->Centroid(cnt);
-		std::cout << cnt[0] << "; " << cnt[1] << "; " << cnt[2] << "; ";
+		std::cout << "\"" << cnt[0] << "\";\"" << cnt[1] << "\";\"" << cnt[2] << "\";";
 		if( otag.GetDataType() == DATA_REAL )
 		{
 			Storage::real_array oarr = it->RealArray(otag);
-			if( comp == -1 ) for(Storage::real_array::iterator jt = oarr.begin(); jt != oarr.end(); ++jt) std::cout << *jt << "; ";
-			else if( comp < (int)oarr.size() ) std::cout << oarr[comp] << "; ";
-			else std::cout << "NAN; ";
+			if (comp == -1)
+			{
+				for (unsigned k = 0; k < oarr.size(); ++k)
+				{
+					std::cout << "\"" << oarr[k] << "\"";
+					if (k + 1 != oarr.size()) std::cout << ";";
+				}
+			}
+			else if( comp < (int)oarr.size() ) std::cout << "\"" << oarr[comp] << "\"";
+			else std::cout << "\"NAN\"";
 		}
 #if defined(USE_AUTODIFF)
 		else if( otag.GetDataType() == DATA_VARIABLE )
 		{
 			Storage::var_array oarr = it->VariableArray(otag);
-			if( comp == -1 ) for(Storage::var_array::iterator jt = oarr.begin(); jt != oarr.end(); ++jt) std::cout << get_value(*jt) << "; ";
-			else if( comp < (int)oarr.size() ) std::cout << get_value(oarr[comp]) << "; ";
-			else std::cout << "NAN; ";
+			if (comp == -1)
+			{
+				for (unsigned k = 0; k < oarr.size(); ++k)
+				{
+					std::cout << "\"" << get_value(oarr[k]) << "\";";
+					if (k + 1 != oarr.size()) std::cout << ";";
+				}
+			}
+			else if( comp < (int)oarr.size() ) std::cout << "\"" << get_value(oarr[comp]) << "\"";
+			else std::cout << "\"NAN\"";
 		}
 #endif
 		else if( otag.GetDataType() == DATA_INTEGER )
 		{
 			Storage::integer_array oarr = it->IntegerArray(otag);
-			if( comp == -1 ) for(Storage::integer_array::iterator jt = oarr.begin(); jt != oarr.end(); ++jt) std::cout << *jt << "; ";
-			else if( comp < (int)oarr.size() ) std::cout << oarr[comp] << "; ";
-			else std::cout << "NAN; ";
+			if (comp == -1)
+			{
+				for (unsigned k = 0; k < oarr.size(); ++k)
+				{
+					std::cout << "\"" << oarr[k] << "\";";
+					if (k + 1 != oarr.size()) std::cout << ";";
+				}
+			}
+			else if( comp < (int)oarr.size() ) std::cout << "\"" << oarr[comp] << "\"";
+			else std::cout << "\"NAN\"";
 		}
 		else if( otag.GetDataType() == DATA_BULK )
 		{
 			Storage::bulk_array oarr = it->BulkArray(otag);
-			if( comp == -1 ) for(Storage::bulk_array::iterator jt = oarr.begin(); jt != oarr.end(); ++jt) std::cout << *jt << "; ";
-			else if( comp < (int)oarr.size() ) std::cout << oarr[comp] << "; ";
-			else std::cout << "NAN; ";
+			if (comp == -1)
+			{
+				for (unsigned k = 0; k < oarr.size(); ++k)
+				{
+					std::cout << "\"" << oarr[k] << "\";";
+					if (k + 1 != oarr.size()) std::cout << ";";
+				}
+			}
+			else if( comp < (int)oarr.size() ) std::cout << "\"" << oarr[comp] << "\"";
+			else std::cout << "\"NAN\"";
 		}
 		std::cout << std::endl;
 	}
