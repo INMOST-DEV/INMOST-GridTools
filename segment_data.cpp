@@ -8,7 +8,7 @@ int main(int argc, char ** argv)
 {
 	if (argc < 9)
 	{
-		std::cout << "Usage: " << argv[0] << " mesh x1 y1 z1 x2 y2 z2 data:component" << std::endl;
+		std::cout << "Usage: " << argv[0] << " mesh x1 y1 z1 x2 y2 z2 data:component [file]" << std::endl;
 		return -1;
 	}
 	
@@ -26,6 +26,7 @@ int main(int argc, char ** argv)
 	p2[2] = atof(argv[7]);
 	
 	std::string odata = std::string(argv[8]);
+	std::ostringstream sout;
 	size_t pos = odata.find(":");
 	int comp = -1; //output all components
 	if( pos != std::string::npos )
@@ -66,24 +67,24 @@ int main(int argc, char ** argv)
 
 	std::sort(cells.rbegin(), cells.rend(), Mesh::CentroidComparator(&m));
 
-	std::cout << "\"x\";\"y\";\"z\";";
+	sout << "\"x\";\"y\";\"z\";";
 	if( comp != -1 )
-		std::cout << "\"" << odata << "[" << comp << "]\"";
+		sout << "\"" << odata << "[" << comp << "]\"";
 	else if( otag.GetSize() != ENUMUNDEF )
 		for (unsigned k = 0; k < otag.GetSize(); ++k)
 		{
-			std::cout << "\"" << odata << "[" << k << "]\"";
-			if (k + 1 != otag.GetSize()) std::cout << ";";
+			sout << "\"" << odata << "[" << k << "]\"";
+			if (k + 1 != otag.GetSize()) sout << ";";
 		}
-	else std::cout << odata;
-	std::cout << std::endl;
+	else sout << odata;
+	sout << std::endl;
 	
 	
 	for(ElementArray<Cell>::iterator it = cells.begin(); it != cells.end(); ++it)
 	{
 		Storage::real cnt[3];
 		it->Centroid(cnt);
-		std::cout << "\"" << cnt[0] << "\";\"" << cnt[1] << "\";\"" << cnt[2] << "\";";
+		sout << "\"" << cnt[0] << "\";\"" << cnt[1] << "\";\"" << cnt[2] << "\";";
 		if( otag.GetDataType() == DATA_REAL )
 		{
 			Storage::real_array oarr = it->RealArray(otag);
@@ -91,12 +92,12 @@ int main(int argc, char ** argv)
 			{
 				for (unsigned k = 0; k < oarr.size(); ++k)
 				{
-					std::cout << "\"" << oarr[k] << "\"";
-					if (k + 1 != oarr.size()) std::cout << ";";
+					sout << "\"" << oarr[k] << "\"";
+					if (k + 1 != oarr.size()) sout << ";";
 				}
 			}
-			else if( comp < (int)oarr.size() ) std::cout << "\"" << oarr[comp] << "\"";
-			else std::cout << "\"NAN\"";
+			else if( comp < (int)oarr.size() ) sout << "\"" << oarr[comp] << "\"";
+			else sout << "\"NAN\"";
 		}
 #if defined(USE_AUTODIFF)
 		else if( otag.GetDataType() == DATA_VARIABLE )
@@ -106,12 +107,12 @@ int main(int argc, char ** argv)
 			{
 				for (unsigned k = 0; k < oarr.size(); ++k)
 				{
-					std::cout << "\"" << get_value(oarr[k]) << "\";";
-					if (k + 1 != oarr.size()) std::cout << ";";
+					sout << "\"" << get_value(oarr[k]) << "\";";
+					if (k + 1 != oarr.size()) sout << ";";
 				}
 			}
-			else if( comp < (int)oarr.size() ) std::cout << "\"" << get_value(oarr[comp]) << "\"";
-			else std::cout << "\"NAN\"";
+			else if( comp < (int)oarr.size() ) sout << "\"" << get_value(oarr[comp]) << "\"";
+			else sout << "\"NAN\"";
 		}
 #endif
 		else if( otag.GetDataType() == DATA_INTEGER )
@@ -121,12 +122,12 @@ int main(int argc, char ** argv)
 			{
 				for (unsigned k = 0; k < oarr.size(); ++k)
 				{
-					std::cout << "\"" << oarr[k] << "\";";
-					if (k + 1 != oarr.size()) std::cout << ";";
+					sout << "\"" << oarr[k] << "\";";
+					if (k + 1 != oarr.size()) sout << ";";
 				}
 			}
-			else if( comp < (int)oarr.size() ) std::cout << "\"" << oarr[comp] << "\"";
-			else std::cout << "\"NAN\"";
+			else if( comp < (int)oarr.size() ) sout << "\"" << oarr[comp] << "\"";
+			else sout << "\"NAN\"";
 		}
 		else if( otag.GetDataType() == DATA_BULK )
 		{
@@ -135,15 +136,20 @@ int main(int argc, char ** argv)
 			{
 				for (unsigned k = 0; k < oarr.size(); ++k)
 				{
-					std::cout << "\"" << oarr[k] << "\";";
-					if (k + 1 != oarr.size()) std::cout << ";";
+					sout << "\"" << oarr[k] << "\";";
+					if (k + 1 != oarr.size()) sout << ";";
 				}
 			}
-			else if( comp < (int)oarr.size() ) std::cout << "\"" << oarr[comp] << "\"";
-			else std::cout << "\"NAN\"";
+			else if( comp < (int)oarr.size() ) sout << "\"" << oarr[comp] << "\"";
+			else sout << "\"NAN\"";
 		}
-		std::cout << std::endl;
+		sout << std::endl;
 	}
+
+	if (argc > 9)
+		std::ofstream(argv[9]) << sout.str();
+	else
+		std::cout << sout.str();
 	
 	return 0;
 }
