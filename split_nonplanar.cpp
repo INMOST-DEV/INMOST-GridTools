@@ -262,13 +262,14 @@ int main(int argc, char ** argv)
 {
 	if( argc < 2 )
 	{
-		printf("Usage: %s input_mesh [output_mesh]\n",argv[0]);
+		printf("Usage: %s input_mesh [output_mesh] [remove_no_orientation=false]\n",argv[0]);
 		return -1;
 	}
 	
 	Mesh A("");
 	A.Load(argv[1]);
-	
+	bool remove_no_prientation = false;
+	if (argc > 3) remove_no_prientation = atoi(argv[3]);
 	Mesh::GeomParam table;
 	table[ORIENTATION] = FACE;
 	table[BARYCENTER] = FACE | CELL | EDGE;
@@ -425,6 +426,35 @@ int main(int argc, char ** argv)
 	for(Mesh::iteratorFace it = A.BeginFace(); it != A.EndFace(); ++it)
 		if( !it->Planarity() )
 			std::cout << it->LocalID() << " is still non-planar, nodes " << it->nbAdjElements(NODE) << std::endl;
+
+	A.RemoveGeometricData(table);
+	A.PrepareGeometricData(table);
+
+	if (remove_no_prientation)
+	{
+		std::cout << "Remove faces without proper orientation" << std::endl;
+		int fixed = 0, noornt = 0, allcnt = 0, badcnt = 0;
+		for (Mesh::iteratorFace it = A.BeginFace(); it != A.EndFace(); ++it)
+			if (it->FixNormalOrientation())
+				fixed++;
+		std::cout << "Fixed: " << fixed << std::endl;
+		for (Mesh::iteratorFace it = A.BeginFace(); it != A.EndFace(); ++it)
+			if (!it->CheckNormalOrientation())
+			{
+				noornt++;
+				it->Delete();
+			}
+		std::cout << "Deleted: " << noornt << std::endl;
+		double cnt[3] = { 0,0,0 };
+		for (Mesh::iteratorFace it = A.BeginFace(); it != A.EndFace(); ++it)
+		{
+			allcnt++;
+			it->Barycenter(cnt);
+			if (!it->Inside(cnt))
+				badcnt++;
+		}
+		std::cout << "Barycenter outside: " << badcnt << "/" << allcnt << std::endl;
+	}
 	
 	
 	if( A.HaveTag("GRIDNAME") )

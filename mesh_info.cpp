@@ -182,13 +182,22 @@ int main(int argc, char *argv[])
 	}
 	//mesh.Save("geom_info.vtk");
 	
-	Storage::real vol = 0;
-	for (Mesh::iteratorCell it = mesh.BeginCell(); it != mesh.EndCell(); ++it) if (it->GetStatus() != Element::Ghost)
-		vol += it->Volume();
+	Storage::real vol = 0, v;
+	int negvol = 0;
+	for (Mesh::iteratorCell it = mesh.BeginCell(); it != mesh.EndCell(); ++it)
+	{
+		if (it->GetStatus() != Element::Ghost)
+		{
+			v = it->Volume();
+			if (v < 0) negvol++;
+			vol += v;
+		}
+	}
 	vol = mesh.Integrate(vol);
+	negvol = mesh.Integrate(negvol);
 	if( mesh.GetProcessorRank() == 0 )
 	{
-		std::cout << "mesh volume " << vol  << std::endl;
+		std::cout << "mesh volume " << vol  << " negative in " << negvol << " cells" << std::endl;
 	}
 	std::cout << "Done with mesh info" << std::endl;
 	if( argc > 2 )
