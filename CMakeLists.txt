@@ -48,6 +48,8 @@ add_executable(Fracture test_fracture.cpp)
 add_executable(segment_data segment_data.cpp)
 add_executable(ChangeTagName change_tag_name.cpp)
 add_executable(Anisotropy anisotropy.cpp)
+add_executable(CylGrid cylinders_grid.cpp)
+add_executable(XY2XZ xy2xz.cpp)
 
 
 
@@ -111,7 +113,9 @@ list(APPEND EXECS
 	Fracture
 	segment_data
 	ChangeTagName
-	Anisotropy)
+	Anisotropy
+	CylGrid
+	XY2XZ)
 list(APPEND LINK_Fracture
 	MakeFaults
 	Fracture)
