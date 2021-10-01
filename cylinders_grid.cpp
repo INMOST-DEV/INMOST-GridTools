@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   // Create i-j-k structure of nodes
   ElementArray<Node> newverts(m);
   newverts.reserve((nx+1)*(ny+1)*(nz+1));
-  double alpha, beta;
+  double alpha, beta, sign = 1;
   //double Rc1 = 0.5 + (R1 - R2) / std::sqrt(8.0), a1 = (2.0 * Rc1 - 1.0) / (4.0 * Rc1 * (Rc1 - 1)), b1 = -0.5 - 2 * a1;
   //double Rc2 = 0.5 + (R2 - R1) / std::sqrt(8.0), a2 = (2.0 * Rc2 - 1.0) / (4.0 * Rc2 * (Rc2 - 1)), b2 = -0.5 - 2 * a2;
   for (int i = 0; i <= nx; i++)
@@ -50,25 +50,58 @@ int main(int argc, char *argv[])
 			  xyz[1] = j * 1.0 / ny;
 			  xyz[2] = k * 1.0 / nz;
 			  //projection of nodes
-			  if (xyz[1] <= 0.5)
+			  if (fabs(R1) && fabs(R2))
 			  {
-				  alpha = xyz[0] / 0.5;
-				  beta = xyz[1] / 0.5;
-				  xyz[0] = (1.0 - beta) * R1 * sin(alpha * pi / 4.0) + beta * (alpha / 2.0 + 0.5 * (R1 - R2) * sin(alpha * pi / 2.0));
-				  xyz[1] = (1.0 - beta) * R1 * cos(alpha * pi / 4.0) + beta * (1.0 - alpha / 2.0 + 0.5 * (R1 - R2) * sin(alpha * pi / 2.0));
+				  if (xyz[1] <= 0.5)
+				  {
+					  alpha = xyz[0] / 0.5;
+					  beta = xyz[1] / 0.5;
+					  xyz[0] = (1.0 - beta) * R1 * sin(alpha * pi / 4.0) + beta * (alpha / 2.0 + 0.5 * sign * (R1 - R2) * sin(alpha * pi / 2.0));
+					  xyz[1] = (1.0 - beta) * R1 * cos(alpha * pi / 4.0) + beta * (1.0 - alpha / 2.0 + 0.5 * sign * (R1 - R2) * sin(alpha * pi / 2.0));
+				  }
+				  else if (xyz[1] >= 0.5)
+				  {
+					  alpha = (1 - xyz[0]) / 0.5;
+					  beta = (1 - xyz[1]) / 0.5;
+					  xyz[0] = 1.0 - ((1.0 - beta) * R2 * sin(alpha * pi / 4.0) + beta * (alpha / 2.0 - 0.5 * sign * (R1 - R2) * sin(alpha * pi / 2.0)));
+					  xyz[1] = 1.0 - ((1.0 - beta) * R2 * cos(alpha * pi / 4.0) + beta * (1.0 - alpha / 2.0 - 0.5 * sign * (R1 - R2) * sin(alpha * pi / 2.0)));
+				  }
 			  }
-			  else if (xyz[1] >= 0.5)
+			  else if (fabs(R1))
 			  {
-				  alpha = (1 - xyz[0]) / 0.5;
-				  beta = (1 - xyz[1]) / 0.5;
-				  xyz[0] = 1.0 - ((1.0 - beta) * R2 * sin(alpha * pi / 4.0) + beta * (alpha / 2.0 - 0.5 * (R1 - R2) * sin(alpha * pi / 2.0)));
-				  xyz[1] = 1.0 - ((1.0 - beta) * R2 * cos(alpha * pi / 4.0) + beta * (1.0 - alpha/2.0 - 0.5 * (R1 - R2) * sin(alpha * pi / 2.0)));
+				  alpha = xyz[1];
+				  beta = xyz[0];
+				  if (xyz[1] <= 0.5)
+				  {
+					  xyz[0] = (1.0 - beta) * R1 * cos(alpha * pi / 2.0) + beta * 1.0;
+					  xyz[1] = (1.0 - beta) * R1 * sin(alpha * pi / 2.0) + beta * alpha * 2.0;
+				  }
+				  else
+				  {
+					  xyz[0] = (1.0 - beta) * R1 * cos(alpha * pi / 2.0) + beta * (2.0 - alpha * 2.0);
+					  xyz[1] = (1.0 - beta) * R1 * sin(alpha * pi / 2.0) + beta * 1.0;
+				  }
+			  }
+			  else if (fabs(R2))
+			  {
+				  alpha = xyz[1];
+				  beta = xyz[0];
+				  if (xyz[1] <= 0.5)
+				  {
+					  xyz[0] = 1.0 - ((1.0 - beta) * R2 * cos(alpha * pi / 2.0) + beta * 1.0);
+					  xyz[1] = 1.0 - ((1.0 - beta) * R2 * sin(alpha * pi / 2.0) + beta * alpha * 2.0);
+				  }
+				  else
+				  {
+					  xyz[0] = 1.0 - ((1.0 - beta) * R2 * cos(alpha * pi / 2.0) + beta * (2.0 - alpha * 2.0));
+					  xyz[1] = 1.0 - ((1.0 - beta) * R2 * sin(alpha * pi / 2.0) + beta * 1.0);
+				  }
 			  }
 			  if (rotate)
 			  {
-				  double x0 = xyz[0]-0.5, y0 = xyz[1]-0.5;
+				  double x0 = xyz[0] - 0.5, y0 = xyz[1] - 0.5;
 				  xyz[0] = x0 * cr + y0 * sr + 0.5;
-				  xyz[1] =-x0 * sr + y0 * cr + 0.5;
+				  xyz[1] = -x0 * sr + y0 * cr + 0.5;
 			  }
 			  xyz[0] += shift[0];
 			  xyz[1] += shift[1];
