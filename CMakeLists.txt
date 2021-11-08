@@ -50,6 +50,7 @@ add_executable(segment_data segment_data.cpp)
 add_executable(ChangeTagName change_tag_name.cpp)
 add_executable(Anisotropy anisotropy.cpp)
 add_executable(CylGrid cylinders_grid.cpp)
+add_executable(SphrGrid spheres_grid.cpp)
 add_executable(XY2XZ xy2xz.cpp)
 
 
@@ -117,6 +118,7 @@ list(APPEND EXECS
 	ChangeTagName
 	Anisotropy
 	CylGrid
+	SphrGrid
 	XY2XZ)
 list(APPEND LINK_Fracture
 	MakeFaults
