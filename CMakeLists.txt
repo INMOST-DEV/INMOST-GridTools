@@ -17,6 +17,7 @@ add_executable(Dual dual.cpp)
 add_executable(Tetra tetra.cpp)
 add_executable(Slice slice.cpp)
 add_executable(SliceFunc test_slice_func.cpp)
+add_executable(SliceEllipse test_slice_ellipse.cpp)
 add_executable(SliceWell slice_well.cpp)
 add_executable(SplitNonplanar split_nonplanar.cpp)
 add_executable(CollapseDegenerate collapse_degenerate.cpp)
@@ -85,6 +86,7 @@ list(APPEND EXECS
 	Tetra
 	Slice
 	SliceFunc
+	SliceEllipse
 	SliceWell
 	SplitNonplanar
 	CollapseDegenerate
@@ -129,6 +131,7 @@ list(APPEND LINK_FixFaults
 list(APPEND LINK_SliceFunc
 	MakeFaults
 	SliceWell
+	SliceEllipse
 	SliceFunc)
 list(APPEND LINK_SetLayers
 	SetLayers)
