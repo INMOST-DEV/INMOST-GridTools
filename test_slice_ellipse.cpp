@@ -91,7 +91,7 @@ int main(int argc, char ** argv)
 		return -1;
 	}
 	
-	std::string grid_out = "grid.pmf";
+	std::string grid_out = "grid.vtk";
 
 	if( argc > 2 ) grid_out = std::string(argv[2]);
 
