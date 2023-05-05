@@ -7,6 +7,7 @@ link_directories(${INMOST_LIBRARY_DIRS})
 include_directories(${INMOST_INCLUDE_DIRS})
 add_definitions(${INMOST_DEFINITIONS})
 
+add_executable(CubeWithChannels cube_with_channels.cpp)
 add_executable(FixFaults test_fix_faults.cpp)
 add_executable(SetLayers test_set_layers.cpp)
 add_executable(MakeFaults test_make_faults.cpp)
@@ -76,6 +77,7 @@ list(APPEND LIBS
 	CubeTransformLib)
 
 list(APPEND EXECS
+	CubeWithChannels
 	FixFaults
 	SetLayers
 	MakeFaults
